@@ -1,5 +1,5 @@
 const  jwt = require  ("jsonwebtoken");
-const  authModel = require ("../Module/patient");
+const  authModel = require ("../Module/Patient");
 const doctorModel = require("../Module/doctorModel");
 
 // Auth middleware

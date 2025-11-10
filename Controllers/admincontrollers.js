@@ -1,5 +1,5 @@
 const Doctor = require("../Module/doctorModel");
-const Patient = require("../Module/patient");
+const Patient = require("../Module/Patient");
 const Appointment = require("../Module/appointment");
 const express = require("express")
 const bcrypt = require("bcryptjs");
