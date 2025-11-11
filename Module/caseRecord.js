@@ -6,11 +6,6 @@ const caseRecordSchema = new mongoose.Schema({
     ref: "Patient",
     required: true,
   },
-  // doctorId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Doctor",
-  //   required: true,
-  // },
   diagnosis: {
     type: String,
     required: true,

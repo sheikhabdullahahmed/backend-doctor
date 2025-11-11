@@ -55,7 +55,7 @@ router.put("/doctors/:id", async (req, res) => {
   req.body,
   { new: true }
 );
-  console.log(doctor)
+  // console.log(doctor)
   res.json({ message: "Doctor Approved", doctor });
 });
 
@@ -66,7 +66,10 @@ router.delete("/doctors/:id", async (req, res) => {
   res.json({ message: "Doctor Deleted" });
 });
 
-//  Patient Routes
+
+
+
+//  Patient Routes  
 router.get("/patients", async (req, res) => {
 
   // const patients = await Patient.find().select("-password");
@@ -80,6 +83,8 @@ router.delete("/patients/:id", async (req, res) => {
   await Patient.findByIdAndDelete(req.params.id);
   res.json({ message: "Patient Deleted" });
 });
+
+
 
 //  Appointment Routes
 router.get("/appointments", async (req, res) => {
@@ -96,22 +101,16 @@ router.delete("/appointments/:id", async (req, res) => {
 
 
 
-
-
-
-
-
-// get All record
-router.get("/all",  async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
-    const records = await CaseRecord.find()
-      .populate("patientId", "name email")
-      // .populate("doctorId", "name specialization");
+    const records = await CaseRecord.find().populate("patientId", "name email");
+    // console.log(records)
     res.json(records);
   } catch (error) {
     res.status(500).json({ message: "Error fetching records", error });
   }
 });
+
 
 
 // delete case record 
