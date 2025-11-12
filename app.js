@@ -13,13 +13,16 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend ka URL
-    credentials: true, // agar cookies ya token bhejna ho
+    origin: [
+      "https://frontend-doctor-hazel.vercel.app", 
+      "http://localhost:5173", 
+    ],
+    credentials: true, 
   })
 );
-app.use(cookieParser());
 
 // Connect MongoDB
 connectDB();
