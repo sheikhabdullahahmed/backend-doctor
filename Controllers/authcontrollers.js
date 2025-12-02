@@ -36,7 +36,6 @@ router.post("/signup", async (req, res) => {
       email: newUser.email,
       phone: newUser.phone,
       role: newUser.role,
-      createdAt: newUser.createdAt,
     };
 
     res.status(201).json({ message: "User created", user: safeUser });
@@ -57,6 +56,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email and password are required" });
 
     // }
+    const isInDevelopment = process.env.NODE_ENV === 'production';
 
     // --- Patient / Doctor Login ---
     let user = await Patient.findOne({ email });
@@ -73,18 +73,21 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.cookie("token", token, {
-      httpOnly: false,
-      sameSite: "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
 
-// res.cookie("token", token, {
-//   httpOnly: true,       // prevents JS access (safer)
-//   secure: true,         // HTTPS only
-//   sameSite: "none",     // required for cross-origin
-//   maxAge: 7 * 24 * 60 * 60 * 1000
-// });
+ res.cookie("token", token, {
+  httpOnly: false, 
+  secure:!isInDevelopment,
+  sameSite: isInDevelopment ? 'lax' : 'none',
+  maxAge: 1000 * 60 * 60 * 24, 
+});
+
+
+// httpOnly: true,
+//   // secure: false, 
+//   secure: true,
+//   // 🔒 hamesha true rakho production ke liye
+//   sameSite: "None", // ✅ cross-site ke liye force None
+//   maxAge: 1000 * 60 * 60 * 24,
 
     res.json({
       message: "Login successful",
