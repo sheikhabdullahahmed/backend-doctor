@@ -18,7 +18,7 @@ app.use(
     origin: [
       "https://frontend-doctor-hazel.vercel.app",
       // "http://localhost:5173",
-    ],
+    ],  
     credentials: true,
   })
 );

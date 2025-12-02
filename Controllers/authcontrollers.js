@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Patient = require("../Module/Patient"); 
+const Patient = require("../Module/Patient");
 const Doctor = require("../Module/doctorModel");
 const requireAuth = require("../middleware/authmiddleware");
 
@@ -11,7 +11,9 @@ router.post("/signup", async (req, res) => {
     const { name, email, phone, password, role } = req.body;
 
     if (!name || !email || !phone || !password) {
-      return res.status(400).json({ message: "Name, email, phone and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Name, email, phone and password are required" });
     }
 
     const existing = await Patient.findOne({ email });
@@ -56,7 +58,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email and password are required" });
 
     // }
-    const isInDevelopment = process.env.NODE_ENV === 'production';
+    // const isInDevelopment = process.env.NODE_ENV === "production";
 
     // --- Patient / Doctor Login ---
     let user = await Patient.findOne({ email });
@@ -73,21 +75,26 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
+    //  res.cookie("token", token, {
+    //   httpOnly: false,
+    //   secure:isInDevelopment,
+    //   sameSite: isInDevelopment ? 'lax' : 'none',
+    //   maxAge: 900000,
+    // });
 
- res.cookie("token", token, {
-  httpOnly: false, 
-  secure:!isInDevelopment,
-  sameSite: isInDevelopment ? 'lax' : 'none',
-  maxAge: 1000 * 60 * 60 * 24, 
-});
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 900000, // 15 minutes
+    });
 
-
-// httpOnly: true,
-//   // secure: false, 
-//   secure: true,
-//   // 🔒 hamesha true rakho production ke liye
-//   sameSite: "None", // ✅ cross-site ke liye force None
-//   maxAge: 1000 * 60 * 60 * 24,
+    // httpOnly: true,
+    //   // secure: false,
+    //   secure: true,
+    //   // 🔒 hamesha true rakho production ke liye
+    //   sameSite: "None", // ✅ cross-site ke liye force None
+    //   maxAge: 1000 * 60 * 60 * 24,
 
     res.json({
       message: "Login successful",
@@ -103,7 +110,7 @@ router.post("/login", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
-}); 
+});
 
 router.get("/profile", requireAuth, async (req, res) => {
   try {
@@ -114,36 +121,29 @@ router.get("/profile", requireAuth, async (req, res) => {
   }
 });
 
-
 // Clear cookie API
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    secure: true,   // true if you're using HTTPS
-    sameSite: "none" // if frontend is on a different domain
+    secure: true, // true if you're using HTTPS
+    sameSite: "none", // if frontend is on a different domain
   });
 
   res.status(200).json({ message: "Cookie cleared successfully" });
 });
 
-
-
-
-
-// pateitn case record 
-router.get("/my-records/:patientId",  async (req, res) => {
+// pateitn case record
+router.get("/my-records/:patientId", async (req, res) => {
   try {
     const { patientId } = req.params;
-    const records = await CaseRecord.find({ patientId })
-      .populate("doctorId", "name specialization");
+    const records = await CaseRecord.find({ patientId }).populate(
+      "doctorId",
+      "name specialization"
+    );
     res.json(records);
   } catch (error) {
     res.status(500).json({ message: "Error fetching records", error });
   }
 });
-
-
-
-
 
 module.exports = router;
