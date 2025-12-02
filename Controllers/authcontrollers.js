@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
         .json({ message: "Email and password are required" });
 
     // }
-    const isInDevelopment = process.env.NODE_ENV === "production";
+    const isInDevelopment = process.env.NODE_ENV !== "production";
 
     // --- Patient / Doctor Login ---
     let user = await Patient.findOne({ email });
@@ -75,12 +75,12 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-     res.cookie("token", token, {
-      httpOnly: true,
-      secure:isInDevelopment,
-      sameSite: 'none',
-      maxAge: 900000,
-    });
+    res.cookie("token", token, {
+  httpOnly: true,
+  secure: !isInDevelopment, // Set to false in development, true in production
+  sameSite: 'none',
+  maxAge: 900000,
+});
 
     // res.cookie("token", token, {
     //   httpOnly: true,
