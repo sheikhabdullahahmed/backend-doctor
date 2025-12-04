@@ -27,7 +27,11 @@ app.use(express.json());
 
 
 const corsOptions = {
-  origin: "http://localhost:5175", // frontend URL
+  origin: [
+       "https://frontend-doctor-seven.vercel.app",
+      // "http://localhost:5175",
+     ],
+   
   credentials: true,               // cookies allow karne ke liye
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allowed methods
   allowedHeaders: ["Content-Type", "Authorization"],   // allowed headers
