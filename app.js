@@ -30,7 +30,7 @@ const corsOptions = {
   origin: [
        "https://frontend-doctor-seven.vercel.app",
       // "http://localhost:5175",
-     ],
+     ], 
    
   credentials: true,               // cookies allow karne ke liye
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allowed methods
