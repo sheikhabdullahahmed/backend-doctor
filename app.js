@@ -13,15 +13,29 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(
-  cors({
-    origin: [
-      "https://frontend-doctor-seven.vercel.app",
-      // "http://localhost:5173",
-    ],  
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       // "https://frontend-doctor-seven.vercel.app",
+//       "http://localhost:5175",
+//     ],  
+//     credentials: true,
+//   })
+  
+// );
+
+
+
+const corsOptions = {
+  origin: "http://localhost:5175", // frontend URL
+  credentials: true,               // cookies allow karne ke liye
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"],   // allowed headers
+};
+
+app.use(cors(corsOptions));
+
+
 app.use(cookieParser());
 
 // Connect MongoDB
