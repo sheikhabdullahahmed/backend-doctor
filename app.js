@@ -11,21 +11,6 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-// Middleware
-app.use(express.json());
-// app.use(
-//   cors({
-//     origin: [
-//       // "https://frontend-doctor-seven.vercel.app",
-//       "http://localhost:5175",
-//     ],  
-//     credentials: true,
-//   })
-  
-// );
-
-
-
 const corsOptions = {
   origin: [
        "https://frontend-doctor-seven.vercel.app",
@@ -33,9 +18,14 @@ const corsOptions = {
      ], 
    
    credentials: true,             // cookies allow karne ke liye
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // allowed methods
+   methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed methods
   // allowedHeaders: ["Content-Type", "Authorization"],    // allowed headers
 };
+
+// Middleware
+app.use(express.json());
+
+
 
 app.use(cors(corsOptions));
 app.options("*", cors());
