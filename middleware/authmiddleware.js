@@ -10,7 +10,10 @@ const requireAuth = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
   
     const user = await authModel.findById(decoded.id).select("-password");
-    req.user = user?._id; 
+
+    req.user= decoded.id;
+    req.role= decoded.role;
+    // req.user = user?._id; 
     next();
   } catch (err) {
     console.log(err.stack)

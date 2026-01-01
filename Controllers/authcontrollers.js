@@ -57,9 +57,6 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Email and password are required" });
 
-    // }
-    const isInDevelopment = process.env.NODE_ENV !== "production";
-
     // --- Patient / Doctor Login ---
     let user = await Patient.findOne({ email });
     if (!user) user = await Doctor.findOne({ email });
@@ -70,44 +67,29 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role || "doctor" },
+      { id: user._id, name: user.name, email: user.email, role: user.role},
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
     res.cookie("token", token, {
-  httpOnly: true,
-  secure: !isInDevelopment, // Set to false in development, true in production
-  sameSite: 'none',
-  maxAge: 900000,
-});
-
-    // res.cookie("token", token, {
-    //   httpOnly: true,
-    //   secure: true,
-    //   sameSite: "none",
-    //   maxAge: 900000, // 15 minutes
-    // });
-
-    // httpOnly: true,
-    //   // secure: false,
-    //   secure: true,
-    //   // 🔒 hamesha true rakho production ke liye
-    //   sameSite: "None", // ✅ cross-site ke liye force None
-    //   maxAge: 1000 * 60 * 60 * 24,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 100 * 60 * 15,
+    });
 
     res.json({
       message: "Login successful",
-      token,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role || "doctor",
+        role: user.role,
       },
     });
   } catch (err) {
-    console.error(err);
+    // console.error(err);
     res.status(500).json({ message: "Server error", error: err.message });
   }
 });
