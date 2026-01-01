@@ -11,16 +11,16 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
-const corsOptions = {
-  origin: [
-       "https://frontend-doctor-seven.vercel.app",
-      // "http://localhost:5173",
-     ], 
-   
-   credentials: true,             // cookies allow karne ke liye
-   methods: ['GET', 'POST', 'PUT', 'DELETE'], // allowed methods
-  // allowedHeaders: ["Content-Type", "Authorization"],    // allowed headers
-};
+app.use(cors({
+  origin: "https://frontend-doctor-seven.vercel.app",
+  credentials: true,
+}));
+
+app.options("*", cors({
+  origin: "https://frontend-doctor-seven.vercel.app",
+  credentials: true,
+}));
+
 
 // Middleware
 app.use(express.json());
@@ -28,7 +28,7 @@ app.use(express.json());
 
 
 app.use(cors(corsOptions));
-app.options("*", cors());
+// app.options("*", cors());
 app.use(cookieParser());
 
 // Connect MongoDB
